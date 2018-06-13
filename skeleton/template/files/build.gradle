@@ -2,17 +2,14 @@
 {{~#def 'githubProjectUrl'}}https://github.com/{{ghProjectOwner}}/{{ghProjectId}}{{/def~}}
 {{~#def 'githubRepoUrl'}}{{githubProjectUrl}}.git{{/def~}}
 
-import org.apache.tools.ant.filters.ReplaceTokens
-import org.gradle.plugins.signing.Sign
-import javax.swing.*
-
 plugins {
-    id 'java'
-    {{#ifb (and appMainClass (not multiModule))}}id 'application'{{/ifb}}
-    id 'eclipse'
-    id 'idea'
-    id 'maven-publish'
-    id "com.github.ethankhall.semantic-versioning" version "1.1.0"}
+    id 'java-gradle-plugin'
+    id 'groovy'
+    id "com.gradle.plugin-publish" version "0.9.10"
+    id "com.github.ethankhall.semantic-versioning" version "1.1.0"
+    id "com.github.ben-manes.versions" version "0.13.0"
+    id 'com.github.jk1.dependency-license-report' version '0.3.8'
+}
 
 project.version.with {
     major = {{prjId}}VersionMajor as int
@@ -26,37 +23,49 @@ project.version.with {
 ext.{{prjId}}Version = project.version as String
 ext.{{prjId}}Tag = Boolean.valueOf({{prjId}}ReleaseBuild) ? "v$ext.{{prjId}}Version" : 'master'
 
-
-
-
 group = '{{group}}'
 version = {{prjId}}Version
 
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:all,-syntax,-missing', '-quiet')
-}
-
-
-
-        
 repositories {
     jcenter()
     mavenCentral()
 }
-
-
 
 sourceCompatibility = 1.8
 
 def defaultEncoding = 'UTF-8'
 [compileJava, compileTestJava]*.options*.encoding = defaultEncoding
 
+[compileGroovy, compileTestGroovy]*.options*.encoding = defaultEncoding
+[compileGroovy, compileTestGroovy]*.groovyOptions*.encoding = defaultEncoding
 
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs = ["src/main/java", "src/main/groovy"]
+
+configurations {
+    compile {transitive = true}
+}
 
 dependencies {
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+    compile gradleTestKit()
+    compile localGroovy()
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
-    runtime ('ch.qos.logback:logback-classic:1.1.7')
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude module: 'groovy-all'
+    }
+    testCompile 'cglib:cglib-nodep:3.2.4'
+    testCompile 'org.objenesis:objenesis:2.4'
+    testCompile('com.athaydes:spock-reports:1.2.13') { transitive = false}
+}
+
+gradlePlugin {
+    plugins {
+        {{pluginExtensionName}} {
+            id = '{{pluginId}}'
+            implementationClass = '{{pluginBasePackage}}.{{pluginClassName}}'
+        }
+    }
 }
 
 jar {
@@ -65,65 +74,3 @@ jar {
                 'Implementation-Version': {{prjId}}Version
     }
 }
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: classes) {
-    classifier "javadoc"
-    from javadoc
-}
-
-artifacts {
-    archives(sourcesJar, javadocJar)
-}
-
-
-
-
-{{#each modules~}}
-{{#def 'projectBlockPrefix'}}project('{{artifact}}') { {{/def}}
-{{#encloseIf multiModule prefix=projectBlockPrefix suffix="}"~}}
-
-{{~#if multiModule}}
-{{#ifb (and appMainClass (compare artifact '==' appModule.artifact))}}apply plugin: 'application'{{/ifb}}
-dependencies {
-    {{~#each dependsOn}}
-    compile project(':{{artifact}}')
-    {{~/each}}
-    {{#ifb (and appMainClass (compare artifact '==' appModule.artifact))}}runtime ('ch.qos.logback:logback-classic:1.1.7'){{/ifb}}
-}
-{{~/if}}
-{{~#ifb (compare artifact '==' appModule.artifact)}}
-artifacts {
-    archives(sourcesJar, javadocJar)
-}
-{{~#if appMainClass}}
-jar {
-    manifest {
-        attributes 'Main-Class': '{{appModule.basePackage}}.{{appMainClass}}'
-    }
-}
-mainClassName = '{{appModule.basePackage}}.{{appMainClass}}'
-
-applicationName = "{{prjId}}"
-
-startScripts {
-    defaultJvmOpts = ['-Dlogback.configurationFile=logback.xml']
-}
-
-applicationDistribution.from("${rootProject.projectDir}/dist") {
-    filter(ReplaceTokens, tokens:[{{prjId}}Version : {{prjId}}Version])
-}
-
-applicationDistribution.from("${rootProject.projectDir}/..") {
-    include('LICENSE')
-}
-{{~/if}}
-{{~/ifb}}
-{{/encloseIf}}
-{{/each}}
-
-

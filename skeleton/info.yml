@@ -14,8 +14,9 @@ minimumRequiredBootHub:
 
 # homepage: http://example.org
 
-# authors:
-#  - Jane Doe
+authors:
+  - Serban Iordache
 
-# tags:
-#  - java
+tags:
+  - gradle
+  - groovy

@@ -2,4 +2,6 @@
 filePath: ___gitignore
 targetPath: .gitignore
 
-
+--- !!org.boothub.context.FileContext
+filePath: plugin.properties
+targetPath: src/main/resources/META-INF/gradle-plugins/{{pluginId}}.properties

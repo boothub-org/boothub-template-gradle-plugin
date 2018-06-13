@@ -1,18 +1,41 @@
+{{~def 'prjId' (asJavaId ghProjectId)~}}
 {{#each modules}}
 --- !!org.boothub.context.SourceContext
 artifact: {{artifact}}
 fileContexts:
     - !!org.boothub.context.SourceFileContext
-      fileName: JavaMain.java
-      targetBaseDir: src/main/java
+      fileName: Plugin.groovy
+      targetBaseDir: src/main/groovy
       targetPackage: {{basePackage}}
-      targetFileClass: {{appMainClass}}
-      enabled: {{and appMainClass (compare artifact '==' appModule.artifact)}}
+      targetFileClass: {{pluginClassName}}
 
     - !!org.boothub.context.SourceFileContext
-      fileName: JavaUtil.java
-      targetBaseDir: src/main/java
+      fileName: PluginExtension.groovy
+      targetBaseDir: src/main/groovy
       targetPackage: {{basePackage}}
-      targetFileClass: {{artifactAsClassName}}Util
-      enabled: {{or (not appMainClass) (compare artifact '!=' appModule.artifact)}}
+      targetFileClass: {{pluginClassName}}Extension
+
+    - !!org.boothub.context.SourceFileContext
+      fileName: Task.groovy
+      targetBaseDir: src/main/groovy
+      targetPackage: {{basePackage}}
+      targetFileClass: {{taskClassName}}
+
+    - !!org.boothub.context.SourceFileContext
+      fileName: TaskImpl.groovy
+      targetBaseDir: src/main/groovy
+      targetPackage: {{basePackage}}.impl
+      targetFileClass: {{taskClassName}}Impl
+
+    - !!org.boothub.context.SourceFileContext
+      fileName: PluginSpec.groovy
+      targetBaseDir: src/test/groovy
+      targetPackage: {{basePackage}}
+      targetFileClass: {{pluginClassName}}Spec
+
+    - !!org.boothub.context.SourceFileContext
+      fileName: TaskSpec.groovy
+      targetBaseDir: src/test/groovy
+      targetPackage: {{basePackage}}
+      targetFileClass: {{taskClassName}}Spec
 {{/each}}
