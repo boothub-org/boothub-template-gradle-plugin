@@ -12,11 +12,12 @@ minimumRequiredBootHub:
   minor: 0
   patch: 0
 
-# homepage: http://example.org
+homepage: http://example.org
 
 authors:
   - Serban Iordache
 
 tags:
   - gradle
+  - plugin
   - groovy
