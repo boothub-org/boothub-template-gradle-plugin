@@ -20,7 +20,20 @@ Download the generated zip file and unpack it. In the {{ghProjectId}} directory 
 gradlew build
 ```
 
-The generated plugin provides a `{{taskName}}` task, which can be configured using the `{{pluginExtensionName}}` extension.
+The generated plugin provides a *{{taskName}}* task, which can be configured using the *{{pluginExtensionName}}* extension.
+
+Example *build.gradle* configuration:
+```
+plugins {
+    id '{{pluginId}}' version '{{versionMajor}}.{{versionMinor}}.{{versionPatch}}'
+}
+
+{{pluginExtensionName}} {
+    {{taskName}}InputProperty = 'my-input-value'
+    {{taskName}}OutputProperty = file('my-output-file.txt')
+}
+```
+
 
 The sample task implementation reads the value of an input property and writes it into the file specified by an output property.
 You should replace it with your own implementation.
