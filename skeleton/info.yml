@@ -5,14 +5,14 @@ caption: A template for creating Gradle plugins
 version:
   major: 1
   minor: 0
-  patch: 0
+  patch: 1
 
 minimumRequiredBootHub:
   major: 1
   minor: 0
   patch: 0
 
-homepage: http://example.org
+homepage: https://github.com/boothub-org/boothub-template-gradle-plugin/blob/master/README.md
 
 authors:
   - Serban Iordache
