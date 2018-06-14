@@ -14,7 +14,7 @@ To start using the template,
 
 Click on the image below for an animation showing the template at work.
 
-<a href="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin.gif"><img src="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin-thumb.gif"></a>
+<a href="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin.gif"><img src="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin-thumb.png"></a>
 
 
 The generated project contains:
