@@ -6,7 +6,16 @@
 ## Gradle-Plugin template ##
 
 
-A [BootHub](https://boothub.org) template for Gradle plugins.
+A BootHub template for Gradle plugins.
+
+
+To start using the template, 
+[click here](https://boothub.org/app#/home/false/https%3A%2F%2Fgithub.com%2Fboothub-org%2Fboothub-template-gradle-plugin%2Freleases%2Fdownload%2Fv1.0.0%2Fgradle-plugin-1.0.0.zip).
+
+Click on the image below for an animation showing the template at work.
+
+<a href="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin.gif"><img src="https://github.com/boothub-org/boothub-template-gradle-plugin/raw/master/doc/img/plugin-thumb.gif"></a>
+
 
 The generated project contains:
 - the plugin main class
